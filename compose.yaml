@@ -1,0 +1,32 @@
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: swiftattend
+      POSTGRES_USER: swiftattend
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-swiftattend-local}
+    ports:
+      - "5432:5432"
+    volumes:
+      - swiftattend-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U swiftattend -d swiftattend"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  app:
+    build: .
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://database:5432/swiftattend
+      DATABASE_USER: swiftattend
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-swiftattend-local}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      CLIENT_URL: http://localhost:8080
+      COOKIE_SECURE: "false"
+    ports:
+      - "8080:8080"
+volumes:
+  swiftattend-data:
