@@ -1,0 +1,82 @@
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #e8eee8;
+  --deep: #132820;
+  --muted: #a5b3a7;
+  --lime: #b7ef8e;
+  --paper: #111713;
+  --line: #2c3830;
+  --white: #1a231d;
+  --red: #ff8888;
+  --green: #82d49e;
+  --shadow: 0 22px 65px #0008;
+}
+
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .app-view { background: #111713; color: var(--ink); }
+:root[data-theme="dark"] .topbar,
+:root[data-theme="dark"] .app-header { background: #151e18ee; border-color: var(--line); }
+:root[data-theme="dark"] .topbar nav,
+:root[data-theme="dark"] .account-chip,
+:root[data-theme="dark"] .page-heading p,
+:root[data-theme="dark"] .status-line,
+:root[data-theme="dark"] .auth-card > p { color: #a5b3a7; }
+:root[data-theme="dark"] .brand-light { color: #a5b3a7; }
+:root[data-theme="dark"] .brand small,
+:root[data-theme="dark"] .section-kicker,
+:root[data-theme="dark"] .eyebrow { color: #91c99f; }
+:root[data-theme="dark"] .button-quiet,
+:root[data-theme="dark"] .auth-switch { background: #27342b; color: #e8eee8; }
+:root[data-theme="dark"] .button-quiet:hover { background: #344238; }
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .trust-card,
+:root[data-theme="dark"] .auth-card,
+:root[data-theme="dark"] .account-menu { background: #1a231d; border-color: var(--line); color: var(--ink); }
+:root[data-theme="dark"] .app-rail { background: #151e18; border-color: var(--line); }
+:root[data-theme="dark"] .rail-link { color: #a5b3a7; }
+:root[data-theme="dark"] .rail-link.active { background: #263d2c; color: #b7efc2; }
+:root[data-theme="dark"] .trust-tags span,
+:root[data-theme="dark"] .metric-box,
+:root[data-theme="dark"] .history-item,
+:root[data-theme="dark"] .challenge-text,
+:root[data-theme="dark"] .auth-switch button.selected { background: #26312a; color: #cfe0d2; }
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] .field,
+:root[data-theme="dark"] .auth-card input,
+:root[data-theme="dark"] .auth-card select { background: #121a15; color: var(--ink); border-color: #3a4940; }
+:root[data-theme="dark"] .roster th,
+:root[data-theme="dark"] .roster td { border-color: #2c3830; color: #c3d0c5; }
+:root[data-theme="dark"] .badge { background: #263d2c; color: #aee8b5; }
+:root[data-theme="dark"] .footer { border-color: var(--line); }
+:root[data-theme="dark"] .modal-x { background: #27342b; color: var(--ink); }
+
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.brand-mark img { display: block; width: 100%; height: 100%; }
+.app-header-links { display: flex; align-items: center; gap: 18px; }
+.app-header-links .text-link { border: 0; background: transparent; font: inherit; font-size: 12px; }
+.account { gap: 12px; }
+.account-menu-wrap { position: relative; }
+.account-menu-toggle { display: inline-flex; align-items: center; gap: 9px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); }
+.account-avatar { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 50%; background: #eaf2e7; color: #306746; font-size: 12px; font-weight: 800; }
+.account-menu { position: absolute; z-index: 25; top: calc(100% + 7px); right: 0; display: grid; min-width: 165px; padding: 6px; border: 1px solid var(--line); border-radius: 11px; background: #fff; box-shadow: var(--shadow); }
+.account-menu button { padding: 10px; border: 0; border-radius: 7px; background: transparent; color: var(--ink); text-align: left; font-size: 12px; }
+.account-menu button:hover { background: #edf3ea; }
+.info-card { min-height: 200px; }
+@media (max-width: 800px) {
+  .app-header { gap: 10px; }
+  .app-header-links { gap: 9px; }
+  .app-header-links .text-link { font-size: 10px; }
+  .account-menu-toggle { gap: 5px; }
+  .account-chip { max-width: 105px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media (max-width: 520px) {
+  .topbar-actions { gap: 5px; }
+  .topbar-actions .button { padding: 9px; }
+  .app-header { height: auto; min-height: 67px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
+  .app-header-links { order: 3; width: 100%; justify-content: flex-end; }
+  .app-header .brand { font-size: 14px; }
+  .app-header .account { margin-left: auto; gap: 6px; }
+  .app-header .theme-toggle { padding: 8px; font-size: 10px; }
+  .account-avatar { width: 26px; height: 26px; }
+}

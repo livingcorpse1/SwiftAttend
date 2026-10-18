@@ -41,8 +41,9 @@ public class SecurityConfig {
     @Bean SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
           .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-          .authorizeHttpRequests(a -> a.requestMatchers("/", "/index.html", "/styles.css", "/app.js", "/face-api.js", "/html5-qrcode.min.js", "/favicon.svg", "/assets/**", "/models/**", "/api/health", "/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/ws/**").permitAll()
+          .authorizeHttpRequests(a -> a.requestMatchers("/", "/index.html", "/styles.css", "/theme.css", "/app.js", "/face-api.js", "/html5-qrcode.min.js", "/favicon.svg", "/brand-mark.svg", "/assets/**", "/models/**", "/api/health", "/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/ws/**").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
+          .exceptionHandling(e -> e.authenticationEntryPoint((req,res,error) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
           .addFilterBefore(new JwtFilter(jwtKey()), UsernamePasswordAuthenticationFilter.class).build();
     }
     @Bean CorsConfigurationSource corsConfigurationSource() {

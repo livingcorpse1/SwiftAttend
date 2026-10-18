@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS app_user (
  id UUID PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(254) NOT NULL UNIQUE,
  password_hash VARCHAR(100) NOT NULL, role VARCHAR(12) NOT NULL CHECK(role IN ('TEACHER','STUDENT')),
- enrollment_number VARCHAR(40) UNIQUE, department VARCHAR(120) NOT NULL DEFAULT 'Computer Science & Engineering',
+ enrollment_number VARCHAR(40) UNIQUE, department VARCHAR(120) NOT NULL DEFAULT 'Computer Science & Engineering', batch VARCHAR(60),
  face_descriptor TEXT, refresh_token_hash VARCHAR(64), created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+ALTER TABLE app_user ADD COLUMN IF NOT EXISTS batch VARCHAR(60);
 CREATE TABLE IF NOT EXISTS subject (
  id UUID PRIMARY KEY, teacher_id UUID NOT NULL REFERENCES app_user(id), code VARCHAR(15) NOT NULL,
  name VARCHAR(120) NOT NULL, department VARCHAR(120) NOT NULL DEFAULT 'Computer Science & Engineering',

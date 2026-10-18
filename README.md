@@ -11,14 +11,14 @@ Static QR attendance codes can be shared with absent students. SwiftAttend makes
 ## Features
 
 - Student and teacher registration, login, role-gated endpoints, BCrypt passwords, 15-minute JWT access tokens, rotating seven-day HttpOnly refresh cookies, and logout revocation.
-- Teacher-started sessions with a classroom GPS anchor, adjustable geofence radius, a signed dynamic QR, QR display, live roster, manual attendance changes with a reason and audit record, CSV and PDF exports.
+- Teacher-started sessions with a class/batch label, classroom GPS anchor, adjustable geofence radius, signed dynamic QR, live roster, audited manual changes, and CSV/PDF exports. Students set the matching class/batch on registration or in their profile; the server only returns matching sessions and checks the batch again during QR verification.
 - One-second QR generation through the authenticated `/attendance-session` replacement at `/ws/attendance/{sessionId}`; each code expires after 2 seconds and is HMAC-SHA256 signed with a per-session 256-bit secret.
 - Database-backed, per-student nonce replay checks and a unique `(session_id, student_id)` attendance constraint. Transactions make the nonce and attendance insert atomic; older nonce rows are purged after ten minutes.
 - Browser-side face-api.js inference using the Aproxy model files. One face must be present, the student performs a random two-blink or head-turn-and-return challenge, and the resulting 128D descriptor is compared on the server with Euclidean distance `≤ 0.45`. Raw video frames are not uploaded.
 - Browser geolocation checked server-side with the Haversine distance calculation and a default 100 m radius (teacher-adjustable from 10–1,000 m).
 - Realtime roster updates over authenticated native WebSockets with expiring, single-use, session-bound handshake tickets and exponential reconnect.
 - Class schedule create/list/active endpoints with conflict checking, teacher analytics, security-event records, audit-log access, CSV/PDF attendance reports.
-- Responsive student/teacher screens, QR scanning through the back camera, attendance history and summary stats, face enrollment, teacher account settings, and a fresh SwiftAttend logo, favicon, palette, typography, landing page, and copy.
+- Responsive student/teacher screens, QR scanning through the back camera, attendance history and summary stats, face enrollment, role-aware profile menus, persistent light/dark themes, and the SwiftAttend logo and favicon.
 
 ## Source analysis and migration decisions
 
@@ -50,7 +50,7 @@ Face detection, landmark extraction, blink counting, head pose, and descriptor g
 1. Teacher signs in and starts a session. The browser obtains the room anchor from `navigator.geolocation`; the server stores it with a configured radius and creates a random 256-bit session secret.
 2. The teacher dashboard opens a session WebSocket. Every second the server creates a fresh 96-bit nonce, millisecond timestamp, and HMAC over `sessionId:timestamp:nonce`; the browser renders each signed heartbeat as a PNG.
 3. Student signs in and completes a random two-blink or head-turn-and-return challenge. The browser concurrently obtains geolocation and computes the 128-value face descriptor locally.
-4. The student scans the current QR. The server checks session state, signature, timestamp (at most 2,000 ms old, at most 1,000 ms in the future), enrolled-face distance, and the classroom radius. It inserts a unique student/nonce row and attendance record in one transaction.
+4. The student sees only an active session matching their class/batch, then scans its current QR. The server checks the batch again, along with session state, signature, timestamp (at most 2,000 ms old, at most 1,000 ms in the future), enrolled-face distance, and classroom radius. It inserts a unique student/nonce row and attendance record in one transaction.
 5. A successful insert broadcasts the roster update. A second attendance record or reused nonce is rejected by PostgreSQL uniqueness, even under concurrent requests.
 
 ## API
@@ -86,7 +86,7 @@ Face detection, landmark extraction, blink counting, head pose, and descriptor g
 
 ## Database
 
-The schema is in `src/main/resources/schema.sql`. It contains `app_user`, `subject`, `class_schedule`, `attendance_session`, `attendance_record`, `used_qr_nonce`, `audit_log`, and `security_event`. Foreign keys, role/status checks, schedule range checks, unique login/enrollment values, and unique attendance/nonce keys are enforced in PostgreSQL. Schema creation is idempotent for local development; production deployments should replace `schema.sql` startup initialization with versioned migrations before evolving the schema.
+The schema is in `src/main/resources/schema.sql`. It contains `app_user` (including student class/batch), `subject`, `class_schedule`, `attendance_session`, `attendance_record`, `used_qr_nonce`, `audit_log`, and `security_event`. Foreign keys, role/status checks, schedule range checks, unique login/enrollment values, and unique attendance/nonce keys are enforced in PostgreSQL. Schema creation is idempotent for local development; production deployments should replace `schema.sql` startup initialization with versioned migrations before evolving the schema.
 
 ## Run locally
 
