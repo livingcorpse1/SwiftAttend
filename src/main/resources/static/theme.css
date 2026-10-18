@@ -80,3 +80,24 @@
   .app-header .theme-toggle { padding: 8px; font-size: 10px; }
   .account-avatar { width: 26px; height: 26px; }
 }
+
+/* Teacher overview: 2x7 weekly calendar grid */
+.tt-calendar-wrap { overflow-x: auto; }
+.tt-calendar { display: grid; grid-template-columns: repeat(7, minmax(96px, 1fr)); gap: 8px; min-width: 660px; }
+.tt-day-head { text-align: center; font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); padding: 2px 0; }
+.tt-cell { min-height: 108px; border: 1px dashed var(--line); border-radius: 11px; padding: 8px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; background: transparent; transition: border-color .15s ease, background .15s ease, box-shadow .15s ease; }
+.tt-cell:hover { border: 1px solid var(--lime); background: #f3f8ee; box-shadow: 0 4px 12px #17382b10; }
+.tt-cell.tt-selected { border: 1px solid var(--lime); background: #eef6e7; }
+.tt-plus { margin: auto; font-size: 15px; color: var(--muted); opacity: .55; }
+.tt-cell:hover .tt-plus { opacity: 1; }
+.tt-entry { background: var(--lime); border-radius: 8px; padding: 6px 7px; font-size: 10px; line-height: 1.5; color: #24402e; }
+.tt-entry strong { display: block; font-size: 10.5px; letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tt-entry small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .8; }
+#tt-editor-panel select.field, #tt-editor-panel input.field { width: 100%; }
+:root[data-theme="dark"] .tt-cell:hover,
+:root[data-theme="dark"] .tt-cell.tt-selected { background: #20302a; }
+:root[data-theme="dark"] .tt-entry { color: #10301c; }
+@media (max-width: 800px) {
+  .tt-calendar { min-width: 560px; grid-template-columns: repeat(7, minmax(80px, 1fr)); gap: 6px; }
+  .tt-cell { min-height: 92px; padding: 6px; }
+}
